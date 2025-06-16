@@ -4,8 +4,8 @@ import { genSaltSync, hashSync } from "bcrypt";
 
 
 export const getUsuarios = async (req: Request, res: Response) => {
-    const { limit = 5, desde = 1 } = req.query;
-    let offset = Number(limit) * (Number(desde) -1);
+    const { limit = 5, page = 1 } = req.query;
+    let offset = Number(limit) * (Number(page) -1);
 
     const {count, rows} = await Usuario.findAndCountAll(
         {
