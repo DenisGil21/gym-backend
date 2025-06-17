@@ -7,6 +7,8 @@ import Usuario from "./usuarios";
 import Rutina from "./rutinas";
 import Ejercicio from "./ejercicios";
 import errorHandler from "../middlewares/error-handler";
+import RutinaEjercicio from "./rutina-ejercicios";
+import DetalleRutina from "./detalle-rutinas";
 
 class Server {
     private app: Application;
@@ -51,8 +53,10 @@ class Server {
             // await Usuario.sync({ force: true });
             // await Rutina.sync({ force: true });
             // await Ejercicio.sync({ force: true });
-            // await db.sync({force: true})
-            console.log('db up');
+            // await RutinaEjercicio.sync({ force: true });
+            // await DetalleRutina.sync({ force: true });
+            await db.sync({force: true})
+            console.log('db up!');
             
         } catch (error) {
             throw new Error(error as string);

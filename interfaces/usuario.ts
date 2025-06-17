@@ -1,3 +1,5 @@
+import { Optional } from "sequelize";
+
 export interface UsuarioAttributes {
     id?: number;
     nombre: string;
@@ -5,3 +7,5 @@ export interface UsuarioAttributes {
     password: string;
     activo: boolean;
 }
+
+export interface UsuarioCreationAttributes extends Optional<UsuarioAttributes, 'id'> { }

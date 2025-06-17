@@ -1,9 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import db from "../db/connection";
-import Rutina from "./rutinas";
-import { UsuarioAttributes } from "../interfaces/usuario";
-
-interface UsuarioCreationAttributes extends Optional<UsuarioAttributes, 'id'> { }
+import { UsuarioAttributes, UsuarioCreationAttributes } from "../interfaces/usuario";
 
 
 class Usuario extends Model<UsuarioAttributes, UsuarioCreationAttributes> implements UsuarioAttributes {
@@ -31,8 +28,7 @@ Usuario.init({
         }
     }
 }) 
-
-Usuario.hasMany(Rutina, { foreignKey: 'usuarioId', as: 'rutinas' });
-Rutina.belongsTo(Usuario, { foreignKey: 'usuarioId', as: 'usuario' });
+// Usuario.hasMany(Rutina, { foreignKey: 'usuarioId', as: 'rutinas' });
+// Rutina.belongsTo(Usuario, { foreignKey: 'usuarioId', as: 'usuario' });
 
 export default Usuario;
