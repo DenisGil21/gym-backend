@@ -1,17 +1,38 @@
 import { DataTypes, Model } from "sequelize";
 import db from "../db/connection";
-import Rutina from "./rutinas";
-import Usuario from "./usuarios";
-import Ejercicio from "./ejercicios";
+import { DetalleRutinaAttributes, DetalleRutinaCreationAttributes } from "../interfaces/detalle-rutina";
 
-class DetalleRutina extends Model {
+class DetalleRutina extends Model<DetalleRutinaAttributes, DetalleRutinaCreationAttributes> implements DetalleRutinaAttributes {
   public id!: number;
-  public usuarioId!: number;
   public rutinaId!: number;
   public ejercicioId!: number;
+  public fecha!: string;
+  public series!: string;
 }
 
 DetalleRutina.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  rutinaId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'rutinas',
+      key: 'id'
+    }
+  },
+  ejercicioId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'ejercicios',
+      key: 'id'
+    }
+  },
   fecha: DataTypes.DATE,
   series: DataTypes.JSON
 }, {
@@ -20,12 +41,5 @@ DetalleRutina.init({
   timestamps: false
 });
 
-Usuario.hasMany(DetalleRutina, { foreignKey: 'usuarioId', as: 'detallerutinas' });
-Rutina.hasMany(DetalleRutina, { foreignKey: 'rutinaId', as: 'detallerutinas' });
-Ejercicio.hasMany(DetalleRutina, { foreignKey: 'ejercicioId', as: 'detallerutinas' });
-Ejercicio.hasMany(DetalleRutina, { foreignKey: 'usuarioId', as: 'rutinas' });
-DetalleRutina.belongsTo(Usuario, { foreignKey: 'usuarioId', as: 'usuario' });
-DetalleRutina.belongsTo(Rutina, { foreignKey: 'rutinaId', as: 'rutina' });
-DetalleRutina.belongsTo(Ejercicio, { foreignKey: 'ejercicioId', as: 'ejercicio' });
 
 export default DetalleRutina;

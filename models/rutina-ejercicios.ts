@@ -1,24 +1,19 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, NonAttribute } from "sequelize";
 import db from "../db/connection";
-import Rutina from "./rutinas";
-import Usuario from "./usuarios";
-import Ejercicio from "./ejercicios";
+import { RutinaEjerciciosAttributes } from '../interfaces/rutina-ejercicios';
+import { RutinaAttributes } from "../interfaces/rutina";
+import { EjercicioAttributes } from "../interfaces/ejercicio";
 
-class RutinaEjercicio extends Model {
+class RutinaEjercicio extends Model<RutinaEjerciciosAttributes> implements RutinaEjerciciosAttributes {
   public usuarioId!: number;
   public rutinaId!: number;
   public ejercicioId!: number;
+
+  public rutina?:  NonAttribute<RutinaAttributes>;
+  public ejercicio?:  NonAttribute<EjercicioAttributes>;
 }
 
 RutinaEjercicio.init({
-  usuarioId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'usuarios',
-      key: 'id'
-    }
-  },
   rutinaId: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -41,13 +36,7 @@ RutinaEjercicio.init({
   timestamps: false
 });
 
-Rutina.belongsToMany(Usuario, { through: RutinaEjercicio, foreignKey: 'rutinaId' });
-Rutina.belongsToMany(Ejercicio, { through: RutinaEjercicio, foreignKey: 'rutinaId' });
 
-Usuario.belongsToMany(Rutina, { through: RutinaEjercicio, foreignKey: 'usuarioId' });
-Usuario.belongsToMany(Ejercicio, { through: RutinaEjercicio, foreignKey: 'usuarioId' });
 
-Ejercicio.belongsToMany(Usuario, { through: RutinaEjercicio, foreignKey: 'ejercicioId' });
-Ejercicio.belongsToMany(Rutina, { through: RutinaEjercicio, foreignKey: 'ejercicioId' });
 
 export default RutinaEjercicio;

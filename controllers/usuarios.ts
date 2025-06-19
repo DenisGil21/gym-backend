@@ -1,15 +1,17 @@
 import { Request, Response } from "express";
 import Usuario from "../models/usuarios";
 import { genSaltSync, hashSync } from "bcrypt";
+import Rutina from "../models/rutinas";
+import Ejercicio from "../models/ejercicios";
 
 
 export const getUsuarios = async (req: Request, res: Response) => {
     const { limit = 5, page = 1 } = req.query;
-    let offset = Number(limit) * (Number(page) -1);
+    let offset = Number(limit) * (Number(page) - 1);
 
-    const {count, rows} = await Usuario.findAndCountAll(
+    const { count, rows } = await Usuario.findAndCountAll(
         {
-            where:{ activo: true},
+            where: { activo: true },
             offset,
             limit: Number(limit)
         }
@@ -18,10 +20,10 @@ export const getUsuarios = async (req: Request, res: Response) => {
     res.json({
         message: 'SUCCESS',
         data: {
-            usuarios:rows,
+            usuarios: rows,
             size: count
         }
-    })
+    });
 }
 
 export const getUsuario = async (req: Request, res: Response) => {
@@ -36,7 +38,7 @@ export const getUsuario = async (req: Request, res: Response) => {
     res.json({
         message: 'SUCCESS',
         data: usuario
-    })
+    });
 }
 
 
@@ -56,15 +58,24 @@ export const postUsuario = async (req: Request, res: Response) => {
     res.status(201).json({
         message: 'SUCCESS',
         body: usuario
-    })
+    });
 }
 
-export const putUsuario = (req: Request, res: Response) => {
+export const getUsuarioRutinas = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { body } = req;
+
+    const usuario = await Usuario.findByPk(id, {
+        include: [{
+            model: Rutina, as: 'rutinas',
+            include: [{
+                model: Ejercicio, as: 'ejercicios'
+            }]
+        }]
+    });
+
     res.json({
-        msg: 'getUsuarios',
-        body
-    })
+        message: 'SUCCESS',
+        data: usuario?.rutinas
+    });
 }
 

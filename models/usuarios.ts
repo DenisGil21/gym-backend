@@ -1,6 +1,7 @@
-import { DataTypes, Model, Optional } from "sequelize";
+import { DataTypes, Model, NonAttribute } from "sequelize";
 import db from "../db/connection";
 import { UsuarioAttributes, UsuarioCreationAttributes } from "../interfaces/usuario";
+import { RutinaAttributes } from "../interfaces/rutina";
 
 
 class Usuario extends Model<UsuarioAttributes, UsuarioCreationAttributes> implements UsuarioAttributes {
@@ -9,6 +10,13 @@ class Usuario extends Model<UsuarioAttributes, UsuarioCreationAttributes> implem
     public email!: string;
     public password!: string;
     public activo!: boolean;
+    
+    // Esto es para consultas
+    public rutinas?: NonAttribute<RutinaAttributes[]>;
+
+    //   // Esto es para guardar el association
+    // public static RutinaEjerciciosAssociation: Association<Usuario, RutinaEjercicio>;
+
 }
 
 Usuario.init({
@@ -16,7 +24,7 @@ Usuario.init({
     email: DataTypes.STRING(100),
     password: DataTypes.STRING,
     activo: DataTypes.BOOLEAN
-},{
+}, {
     sequelize: db,
     tableName: 'usuarios',
     timestamps: false, // <-- Esto debe coincidir con tu tabla
@@ -27,8 +35,6 @@ Usuario.init({
         withPassword: {
         }
     }
-}) 
-// Usuario.hasMany(Rutina, { foreignKey: 'usuarioId', as: 'rutinas' });
-// Rutina.belongsTo(Usuario, { foreignKey: 'usuarioId', as: 'usuario' });
+})
 
 export default Usuario;

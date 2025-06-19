@@ -3,12 +3,9 @@ import userRoutes from "../routes/usuario";
 import authRoutes from "../routes/auth";
 import cors from 'cors';
 import db from "../db/connection";
-import Usuario from "./usuarios";
-import Rutina from "./rutinas";
-import Ejercicio from "./ejercicios";
 import errorHandler from "../middlewares/error-handler";
-import RutinaEjercicio from "./rutina-ejercicios";
-import DetalleRutina from "./detalle-rutinas";
+import { Usuario, Rutina, Ejercicio, RutinaEjercicio, DetalleRutina } from "./index";
+import "./index";
 
 class Server {
     private app: Application;
@@ -55,7 +52,7 @@ class Server {
             // await Ejercicio.sync({ force: true });
             // await RutinaEjercicio.sync({ force: true });
             // await DetalleRutina.sync({ force: true });
-            await db.sync({force: true})
+            // await db.sync({force: true})
             console.log('db up!');
             
         } catch (error) {
