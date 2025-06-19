@@ -1,81 +1,84 @@
 import { Request, Response } from "express";
 import Usuario from "../models/usuarios";
-import { genSaltSync, hashSync } from "bcrypt";
-import Rutina from "../models/rutinas";
-import Ejercicio from "../models/ejercicios";
+import { UsuarioCreationAttributes } from "../interfaces/usuario";
+import { UsuarioService } from "../services/usuario-service";
 
 
-export const getUsuarios = async (req: Request, res: Response) => {
-    const { limit = 5, page = 1 } = req.query;
-    let offset = Number(limit) * (Number(page) - 1);
+// Se usa arrow function por el motivo:
+// Cuando Express llama a tu método router el this ya no es el usuarioController, es undefined (modo estricto) o globalThis / window (modo no estricto)
+// por consecuencia hay que usar bind
 
-    const { count, rows } = await Usuario.findAndCountAll(
-        {
-            where: { activo: true },
-            offset,
-            limit: Number(limit)
-        }
-    );
+export class UsuarioController {
 
-    res.json({
-        message: 'SUCCESS',
-        data: {
-            usuarios: rows,
-            size: count
-        }
-    });
-}
+    private usuarioService = new UsuarioService();
 
-export const getUsuario = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    getUsuarios = async(req: Request, res: Response) => {
+        const { limit = 5, page = 1 } = req.query;
+        let offset = Number(limit) * (Number(page) - 1);
 
-    const usuario = await Usuario.findByPk(id);
-    if (!usuario) {
-        res.status(404).json({
-            message: 'NOT FOUND'
-        })
+        const { count, rows } = await Usuario.findAndCountAll(
+            {
+                where: { activo: true },
+                offset,
+                limit: Number(limit)
+            }
+        );
+
+        res.json({
+            message: 'SUCCESS',
+            data: {
+                usuarios: rows,
+                size: count
+            }
+        });
     }
-    res.json({
-        message: 'SUCCESS',
-        data: usuario
-    });
+
+    getUsuario = async(req: Request, res: Response) => {
+        const { id } = req.params;
+
+        const usuario = await Usuario.findByPk(id);
+        if (!usuario) {
+            res.status(404).json({
+                message: 'NOT FOUND'
+            })
+        }
+        res.json({
+            message: 'SUCCESS',
+            data: usuario
+        });
+    }
+
+    postUsuario = async(req: Request, res: Response) => {
+        const saveUsuario: UsuarioCreationAttributes = req.body;
+        
+        let usuario = await this.usuarioService.postUsuarioService(saveUsuario);
+
+        res.status(201).json({
+            message: 'SUCCESS',
+            body: usuario
+        });
+    }
+
+    getUsuarioRutinas = async(req: Request, res: Response) => {
+        const { id } = req.params;
+
+        let usuario = await this.usuarioService.getUsuarioRutinasService(id);
+
+        res.json({
+            message: 'SUCCESS',
+            data: usuario?.rutinas
+        });
+    }
+
+    getUsuarioRutinasEjercicios = async(req: Request, res: Response) => {
+        const { id, rutinaId } = req.params;
+
+        let usuario = await this.usuarioService.getUsuarioRutinasEjerciciosService(id, rutinaId);
+
+        res.json({
+            message: 'SUCCESS',
+            data: usuario?.rutinas
+        });
+    }
+
 }
-
-
-export const postUsuario = async (req: Request, res: Response) => {
-    const { nombre, email, password } = req.body;
-
-    const salt = genSaltSync();
-    const hash = hashSync(password.toString(), salt);
-
-    const usuario = await Usuario.create({
-        nombre,
-        email,
-        password: hash,
-        activo: true
-
-    });
-    res.status(201).json({
-        message: 'SUCCESS',
-        body: usuario
-    });
-}
-
-export const getUsuarioRutinas = async (req: Request, res: Response) => {
-    const { id } = req.params;
-
-    const usuario = await Usuario.findByPk(id, {
-        include: [{
-            model: Rutina, as: 'rutinas',
-            include: [{
-                model: Ejercicio, as: 'ejercicios'
-            }]
-        }]
-    });
-
-    res.json({
-        message: 'SUCCESS',
-        data: usuario?.rutinas
-    });
-}
-

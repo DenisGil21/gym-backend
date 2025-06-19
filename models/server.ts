@@ -1,6 +1,7 @@
 import express, { Application }  from "express";
 import userRoutes from "../routes/usuario";
 import authRoutes from "../routes/auth";
+import rutinaRoutes from "../routes/rutina";
 import cors from 'cors';
 import db from "../db/connection";
 import errorHandler from "../middlewares/error-handler";
@@ -13,6 +14,7 @@ class Server {
     private apiPaths = {
         usuarios: '/api/usuarios',
         auth: '/api/auth',
+        rutinas: '/api/rutinas',
     }
 
     constructor() {
@@ -28,6 +30,7 @@ class Server {
     private routes(){
         this.app.use(this.apiPaths.usuarios, userRoutes);
         this.app.use(this.apiPaths.auth, authRoutes);
+        this.app.use(this.apiPaths.rutinas, rutinaRoutes);
     }
 
     private middlewares(){
