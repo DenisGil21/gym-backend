@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Usuario from "../models/usuarios";
 import { UsuarioCreationAttributes } from "../interfaces/usuario";
-import { UsuarioService } from "../services/usuario-service";
+import { UsuarioService } from '../services/usuario-service';
 
 
 // Se usa arrow function por el motivo:
@@ -12,7 +12,7 @@ export class UsuarioController {
 
     private usuarioService = new UsuarioService();
 
-    getUsuarios = async(req: Request, res: Response) => {
+    getUsuarios = async (req: Request, res: Response) => {
         const { limit = 5, page = 1 } = req.query;
         let offset = Number(limit) * (Number(page) - 1);
 
@@ -33,7 +33,7 @@ export class UsuarioController {
         });
     }
 
-    getUsuario = async(req: Request, res: Response) => {
+    getUsuario = async (req: Request, res: Response) => {
         const { id } = req.params;
 
         const usuario = await Usuario.findByPk(id);
@@ -48,10 +48,10 @@ export class UsuarioController {
         });
     }
 
-    postUsuario = async(req: Request, res: Response) => {
+    postUsuario = async (req: Request, res: Response) => {
         const saveUsuario: UsuarioCreationAttributes = req.body;
-        
-        let usuario = await this.usuarioService.postUsuarioService(saveUsuario);
+
+        let usuario = await this.usuarioService.postUsuario(saveUsuario);
 
         res.status(201).json({
             message: 'SUCCESS',
@@ -59,10 +59,10 @@ export class UsuarioController {
         });
     }
 
-    getUsuarioRutinas = async(req: Request, res: Response) => {
+    getUsuarioRutinas = async (req: Request, res: Response) => {
         const { id } = req.params;
 
-        let usuario = await this.usuarioService.getUsuarioRutinasService(id);
+        let usuario = await this.usuarioService.getUsuarioRutinas(id);
 
         res.json({
             message: 'SUCCESS',
@@ -70,10 +70,10 @@ export class UsuarioController {
         });
     }
 
-    getUsuarioRutinasEjercicios = async(req: Request, res: Response) => {
+    getUsuarioRutinasEjercicios = async (req: Request, res: Response) => {
         const { id, rutinaId } = req.params;
 
-        let usuario = await this.usuarioService.getUsuarioRutinasEjerciciosService(id, rutinaId);
+        let usuario = await this.usuarioService.getUsuarioRutinasEjercicios(id, rutinaId);
 
         res.json({
             message: 'SUCCESS',

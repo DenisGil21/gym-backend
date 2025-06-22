@@ -1,15 +1,14 @@
 import { Request, Response } from "express";
-import { Rutina } from "../models";
-import { RutinaAttributes } from "../interfaces/rutina";
+import { RutinaService } from '../services/rutina-service';
 
 export class RutinaController {
-    postRutinas = async (req: Request, res: Response) => {
-        let { nombre, usuarioId } = req.body;
 
-        let rutina: RutinaAttributes = await Rutina.create({
-            nombre,
-            usuarioId
-        });
+    private rutinaService = new RutinaService();
+
+    postRutinas = async (req: Request, res: Response) => {
+        let { nombre, usuarioId, ejercicios } = req.body;
+
+        let rutina = await this.rutinaService.postRutina(nombre, usuarioId, ejercicios);
 
         res.status(201).json({
             status: "SUCCESS",

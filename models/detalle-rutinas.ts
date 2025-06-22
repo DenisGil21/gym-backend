@@ -1,13 +1,13 @@
 import { DataTypes, Model } from "sequelize";
 import db from "../db/connection";
-import { DetalleRutinaAttributes, DetalleRutinaCreationAttributes } from "../interfaces/detalle-rutina";
+import { DetalleRutinaAttributes, DetalleRutinaCreationAttributes, Serie } from "../interfaces/detalle-rutina";
 
 class DetalleRutina extends Model<DetalleRutinaAttributes, DetalleRutinaCreationAttributes> implements DetalleRutinaAttributes {
   public id!: number;
   public rutinaId!: number;
   public ejercicioId!: number;
   public fecha!: string;
-  public series!: string;
+  public series!: Serie[];
 }
 
 DetalleRutina.init({

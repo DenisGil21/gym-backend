@@ -2,6 +2,8 @@ import express, { Application }  from "express";
 import userRoutes from "../routes/usuario";
 import authRoutes from "../routes/auth";
 import rutinaRoutes from "../routes/rutina";
+import ejercicioRoutes from "../routes/ejercicio";
+import detalleRutinaRoutes from "../routes/detalle-rutina";
 import cors from 'cors';
 import db from "../db/connection";
 import errorHandler from "../middlewares/error-handler";
@@ -15,6 +17,8 @@ class Server {
         usuarios: '/api/usuarios',
         auth: '/api/auth',
         rutinas: '/api/rutinas',
+        ejercicios: '/api/ejercicios',
+        detalleRutinas: '/api/detallerutinas',
     }
 
     constructor() {
@@ -31,6 +35,8 @@ class Server {
         this.app.use(this.apiPaths.usuarios, userRoutes);
         this.app.use(this.apiPaths.auth, authRoutes);
         this.app.use(this.apiPaths.rutinas, rutinaRoutes);
+        this.app.use(this.apiPaths.ejercicios, ejercicioRoutes);
+        this.app.use(this.apiPaths.detalleRutinas, detalleRutinaRoutes);
     }
 
     private middlewares(){
