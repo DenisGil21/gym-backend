@@ -42,7 +42,7 @@ export const login = async (req: Request, res: Response) => {
     res.json({
         data: {
             token,
-            usuarioSinPassword
+            usuario:usuarioSinPassword
         },
 
     })

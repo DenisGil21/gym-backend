@@ -1,13 +1,12 @@
 import { DataTypes, Model } from "sequelize";
 import db from "../db/connection";
-import { DetalleRutinaAttributes, DetalleRutinaCreationAttributes, Serie } from "../interfaces/detalle-rutina";
+import { DetalleRutinaAttributes, DetalleRutinaCreationAttributes } from "../interfaces/detalle-rutina";
 
 class DetalleRutina extends Model<DetalleRutinaAttributes, DetalleRutinaCreationAttributes> implements DetalleRutinaAttributes {
   public id!: number;
   public rutinaId!: number;
-  public ejercicioId!: number;
   public fecha!: string;
-  public series!: Serie[];
+  public activo!: boolean;
 }
 
 DetalleRutina.init({
@@ -25,16 +24,11 @@ DetalleRutina.init({
       key: 'id'
     }
   },
-  ejercicioId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'ejercicios',
-      key: 'id'
-    }
-  },
   fecha: DataTypes.DATE,
-  series: DataTypes.JSON
+  activo: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  }
 }, {
   sequelize: db,
   tableName: 'detalle_rutina',

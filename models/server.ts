@@ -9,6 +9,7 @@ import db from "../db/connection";
 import errorHandler from "../middlewares/error-handler";
 import { Usuario, Rutina, Ejercicio, RutinaEjercicio, DetalleRutina } from "./index";
 import "./index";
+import Serie from "./series";
 
 class Server {
     private app: Application;
@@ -61,6 +62,7 @@ class Server {
             // await Ejercicio.sync({ force: true });
             // await RutinaEjercicio.sync({ force: true });
             // await DetalleRutina.sync({ force: true });
+            // await Serie.sync({ force: true });
             // await db.sync({force: true})
             console.log('db up!');
             
