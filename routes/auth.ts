@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { login } from "../controllers/auth";
 import { body } from "express-validator";
 import validate from "../middlewares/validate";
+import { AuthController } from "../controllers/auth";
+import validarJWT from "../middlewares/validate-jwt";
 
+const authController = new AuthController();
 const router = Router();
 
 router.post('/login', [
@@ -12,6 +14,9 @@ router.post('/login', [
         .isEmail().withMessage("email inválido"),
     body('password').notEmpty().withMessage('Password obligatorio'),
     validate
-], login);
+], authController.login);
+
+
+router.get('/refreshtoken',validarJWT, authController.refreshToken);
 
 export default router;

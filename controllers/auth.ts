@@ -1,50 +1,50 @@
 import { Request, Response } from "express";
-import Usuario from "../models/usuarios";
-import { compareSync } from "bcrypt";
 import generarJWT from "../helpers/generar-jwt";
+import { AuthService } from "../services/auth-service";
+import { RequestAuth } from "../middlewares/validate-jwt";
 
-export const login = async (req: Request, res: Response) => {
+export class AuthController {
 
-    const { email, password } = req.body;
+    private authService = new AuthService();
 
-    // Verificar si el email existe
-    const usuario = await Usuario.scope().findOne({
-        where: {
-            email
+    login = async (req: Request, res: Response) => {
+
+        const { email, password } = req.body;
+
+        let resService = await this.authService.login(email, password);
+
+        if (resService.status == "ERROR") {
+            res.status(400).json({
+                msg: 'Correo / Password no son correctos - correo'
+            });
+        } else {
+            res.json({
+                status: resService.status,
+                data: {
+                    msg: resService.msg,
+                    token: resService.token,
+                    usuario: resService.usuario
+                },
+
+            })
         }
-    });
-    if (!usuario) {
-        res.status(400).json({
-            msg: 'Correo / Password no son correctos - correo'
-        });
-        return
+
     }
 
-    // SI el usuario está activo
-    if (!usuario.activo) {
-        res.status(400).json({
-            msg: 'Usuario / Password no son correctos - estado: false'
+    refreshToken = async (req: RequestAuth, res: Response) => {
+        let usuarioAuth = req.usuario;
+
+        const token = await generarJWT(Number(usuarioAuth?.id));
+
+        res.json({
+            status: "SUCCESS",
+            data: {
+                token,
+                usuarioAuth
+            }
         });
-        return
+
+
     }
-
-    // Verificar la contraseña
-    const validPassword = compareSync(password, usuario.password);
-    if (!validPassword) {
-        res.status(400).json({
-            msg: 'Usuario / Password no son correctos - password'
-        });
-    }
-
-    // Generar el JWT
-    const token = await generarJWT(usuario.id);
-    let { password: password1, ...usuarioSinPassword } = usuario.get({ plain: true })
-    res.json({
-        data: {
-            token,
-            usuario:usuarioSinPassword
-        },
-
-    })
 
 }

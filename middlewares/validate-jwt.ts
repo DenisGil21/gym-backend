@@ -2,18 +2,19 @@ import { NextFunction, Request, Response } from "express";
 import Usuario from "../models/usuarios";
 import { JwtPayload, verify } from "jsonwebtoken";
 
-export interface RequestExt extends Request {
+export interface RequestAuth extends Request {
     usuario?: Usuario;
-  }
+}
 
-const validarJWT = async (req: RequestExt, res: Response, next: NextFunction) => {
+const validarJWT = async (req: RequestAuth, res: Response, next: NextFunction) => {
 
-    const token = req.header('x-token');
+    const token = req.header('token');
 
     if (!token) {
-        return res.status(401).json({
+        res.status(401).json({
             msg: 'No hay token en la petición'
         });
+        return;
     }
 
     try {
@@ -25,16 +26,18 @@ const validarJWT = async (req: RequestExt, res: Response, next: NextFunction) =>
         const usuario = await Usuario.findByPk(id);
 
         if (!usuario) {
-            return res.status(401).json({
+            res.status(401).json({
                 msg: 'Token no válido - usuario no existe DB'
             })
+            return
         }
 
         // Verificar si el uid tiene estado true
         if (!usuario.activo) {
-            return res.status(401).json({
+            res.status(401).json({
                 msg: 'Token no válido - usuario con estado: false'
             })
+            return
         }
 
 
@@ -54,6 +57,4 @@ const validarJWT = async (req: RequestExt, res: Response, next: NextFunction) =>
 
 
 
-module.exports = {
-    validarJWT
-}
+export default validarJWT;
