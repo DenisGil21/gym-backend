@@ -1,4 +1,3 @@
-import { Optional } from "sequelize";
 
 export interface DetalleRutinaAttributes {
     id?: number;
@@ -7,4 +6,7 @@ export interface DetalleRutinaAttributes {
     activo: boolean;
 }
 
-export interface DetalleRutinaCreationAttributes extends Optional<DetalleRutinaAttributes, 'id'> { }
+export interface DetalleRutinaCreationAttributes extends Partial<Pick<DetalleRutinaAttributes, 'id' | 'activo'>> {
+    rutinaId: number;
+    fecha: string;
+}

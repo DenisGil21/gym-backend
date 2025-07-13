@@ -13,8 +13,7 @@ export class AuthService {
         if (!usuario) {
             return {
                 status: "BAD REQUEST",
-                msg: 'Correo / Password no son correctos - correo',
-                usuario: null
+                error: 'Correo / Password no son correctos - correo',
             }
         }
 
@@ -22,8 +21,7 @@ export class AuthService {
         if (!usuario.activo) {
             return {
                 status: "BAD REQUEST",
-                msg: 'Usuario / Password no son correctos - estado: false',
-                usuario: null
+                error: 'Usuario / Password no son correctos - estado: false',
             }
         }
 
@@ -32,8 +30,7 @@ export class AuthService {
         if (!validPassword) {
             return {
                 status: "BAD REQUEST",
-                msg: 'Usuario / Password no son correctos - password',
-                usuario: null,
+                error: 'Usuario / Password no son correctos - password',
             }
         }
 
@@ -43,7 +40,6 @@ export class AuthService {
 
         return {
             status: "SUCCESS",
-            msg: "Usuario logueado",
             usuario: usuarioSinPassword,
             token
         }

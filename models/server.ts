@@ -4,6 +4,7 @@ import authRoutes from "../routes/auth";
 import rutinaRoutes from "../routes/rutina";
 import ejercicioRoutes from "../routes/ejercicio";
 import detalleRutinaRoutes from "../routes/detalle-rutina";
+import serieRoutes from "../routes/serie";
 import cors from 'cors';
 import db from "../db/connection";
 import errorHandler from "../middlewares/error-handler";
@@ -20,6 +21,7 @@ class Server {
         rutinas: '/api/rutinas',
         ejercicios: '/api/ejercicios',
         detalleRutinas: '/api/detallerutinas',
+        series: '/api/series',
     }
 
     constructor() {
@@ -38,6 +40,7 @@ class Server {
         this.app.use(this.apiPaths.rutinas, rutinaRoutes);
         this.app.use(this.apiPaths.ejercicios, ejercicioRoutes);
         this.app.use(this.apiPaths.detalleRutinas, detalleRutinaRoutes);
+        this.app.use(this.apiPaths.series, serieRoutes);
     }
 
     private middlewares(){

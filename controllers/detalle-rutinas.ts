@@ -6,13 +6,13 @@ export class DetalleRutinaController {
     private detalleRutinaService = new DetalleRutinaService();
 
     postDetalleRutina = async (req: Request, res: Response) => {
-        // let body: DetalleRutinaPayload = req.body;
+        let {rutinaId, fecha } = req.body;
         
-        // let detalleRutina = await this.detalleRutinaService.postDetalleRutina(body);
+        let detalleRutina = await this.detalleRutinaService.postDetalleRutina(rutinaId, fecha);
 
-        // res.status(201).json({
-        //     status:"SUCCESS",
-        //     data: detalleRutina
-        // });
+        res.status(201).json({
+            status:"SUCCESS",
+            data: detalleRutina
+        });
     }
 }

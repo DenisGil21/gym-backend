@@ -25,7 +25,7 @@ export class UsuarioController {
         );
 
         res.json({
-            message: 'SUCCESS',
+            status: 'SUCCESS',
             data: {
                 usuarios: rows,
                 size: count
@@ -39,11 +39,11 @@ export class UsuarioController {
         const usuario = await Usuario.findByPk(id);
         if (!usuario) {
             res.status(404).json({
-                message: 'NOT FOUND'
+                status: 'NOT FOUND'
             })
         }
         res.json({
-            message: 'SUCCESS',
+            status: 'SUCCESS',
             data: usuario
         });
     }
@@ -54,8 +54,8 @@ export class UsuarioController {
         let usuario = await this.usuarioService.postUsuario(saveUsuario);
 
         res.status(201).json({
-            message: 'SUCCESS',
-            body: usuario
+            status: 'SUCCESS',
+            data: usuario
         });
     }
 
@@ -65,7 +65,7 @@ export class UsuarioController {
         let usuario = await this.usuarioService.getUsuarioRutinas(id);
 
         res.json({
-            message: 'SUCCESS',
+            status: 'SUCCESS',
             data: usuario?.rutinas
         });
     }
@@ -76,7 +76,7 @@ export class UsuarioController {
         let usuario = await this.usuarioService.getUsuarioRutinasEjercicios(id, rutinaId);
 
         res.json({
-            message: 'SUCCESS',
+            status: 'SUCCESS',
             data: usuario?.rutinas
         });
     }

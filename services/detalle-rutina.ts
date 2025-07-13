@@ -1,16 +1,11 @@
 import { DetalleRutina } from "../models";
 
 export class DetalleRutinaService {
-    // async postDetalleRutina(detalleRutinaPayload: DetalleRutinaPayload) {
+    async postDetalleRutina(rutinaId: number, fecha: string): Promise<DetalleRutina> {
 
-    //     let { rutinaId, ejercicios, fecha, series } = detalleRutinaPayload; 
-
-    //     const registros = ejercicios.map(ejercicioId => ({
-    //         rutinaId,
-    //         ejercicioId,
-    //         fecha,
-    //         series
-    //     }));
-    //     return await DetalleRutina.bulkCreate(registros);
-    // }
+        return await DetalleRutina.create({
+            rutinaId,
+            fecha
+        });
+    }
 }

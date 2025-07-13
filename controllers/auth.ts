@@ -13,19 +13,13 @@ export class AuthController {
 
         let resService = await this.authService.login(email, password);
 
-        if (resService.status == "ERROR") {
+        if (resService.status == "BAD REQUEST") {
             res.status(400).json({
-                msg: 'Correo / Password no son correctos - correo'
+               ...resService
             });
         } else {
             res.json({
-                status: resService.status,
-                data: {
-                    msg: resService.msg,
-                    token: resService.token,
-                    usuario: resService.usuario
-                },
-
+                ...resService
             })
         }
 

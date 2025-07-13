@@ -1,11 +1,11 @@
 import { DataTypes, Model } from "sequelize";
 import db from "../db/connection";
-import { SerieAttributes } from "../interfaces/serie";
+import { SerieAttributes, SerieData } from "../interfaces/serie";
 
 class Serie extends Model<SerieAttributes> implements SerieAttributes {
     public ejercicioId!: number;
     public detallerutinaId!: number;
-    public series!: string[];
+    public series!: SerieData[];
 }
 
 Serie.init({
@@ -28,7 +28,7 @@ Serie.init({
     series: DataTypes.JSON
 }, {
     sequelize: db,
-    tableName: 'serie',
+    tableName: 'series',
     timestamps: false
 });
 
